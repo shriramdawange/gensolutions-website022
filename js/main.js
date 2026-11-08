@@ -60,12 +60,12 @@
           const bounds = art.getBoundingClientRect();
           const x = (event.clientX - bounds.left) / bounds.width - 0.5;
           const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-          art.style.setProperty("--art-x", String(x));
-          art.style.setProperty("--art-y", String(y));
+          art.style.setProperty("--art-shift-x", `${x * -14}px`);
+          art.style.setProperty("--art-shift-y", `${y * -14}px`);
         });
         art.addEventListener("pointerleave", () => {
-          art.style.setProperty("--art-x", "0");
-          art.style.setProperty("--art-y", "0");
+          art.style.setProperty("--art-shift-x", "0px");
+          art.style.setProperty("--art-shift-y", "0px");
         });
       }
 
