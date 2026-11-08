@@ -96,7 +96,8 @@
       ".intro-content h2, .intro-bottom, .section-heading, .capability-card, " +
       ".project-row, .manifesto-inner > p, .manifesto-bottom, " +
       ".people-strip > div, .contact-band-inner, .dna-statement, " +
-      ".dna-grid article, .content-grid, .team-card, .project-detail > *, .contact-layout > *"
+      ".dna-grid article, .method-step, .method-footer, .content-grid, " +
+      ".team-card, .project-detail > *, .contact-layout > *"
     );
 
     if ("IntersectionObserver" in window) {
