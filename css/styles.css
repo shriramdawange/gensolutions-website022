@@ -228,3 +228,10 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;op
 @media(max-width:900px){.nav{gap:15px}.method-heading{grid-template-columns:1fr;gap:20px}.method-track{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:800px){.hero{min-height:auto;padding-bottom:75px}.hero::after{bottom:22px}.hero-art{border:0}.dna-section::before{right:-.14em;top:.05em}.method-track{grid-template-columns:repeat(2,1fr)}.page-hero::after{right:-180px;top:20%}.footer-main{gap:36px 26px}}
 @media(max-width:500px){.hero h1{font-size:clamp(62px,17vw,82px)}.hero-art{background:radial-gradient(circle at 50% 50%,rgba(199,239,120,.09),transparent 42%)}.dna-top h2{font-size:clamp(38px,11vw,52px)}.dna-statement{padding:23px 21px}.method-track{grid-template-columns:1fr}.method-step{min-height:225px}.method-icon{margin:25px 0 17px}.method-footer{align-items:flex-start;flex-direction:column;gap:13px}.project-row{min-height:105px}.project-info h3{font-size:18px}.page-content{padding-top:55px;padding-bottom:85px}.footer-main{padding-top:55px;padding-bottom:45px}}
+
+/* Hero parallax uses CSS variables so the motion stays composited and subtle. */
+.art-core{transform:translate3d(var(--art-shift-x,0px),var(--art-shift-y,0px),0);will-change:transform}
+.art-orbit{will-change:transform}
+.hero-art{perspective:1000px}
+.contact-form input:focus-visible,.contact-form textarea:focus-visible,.contact-form select:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media(max-width:800px){.art-core{transform:none!important}.art-orbit{will-change:auto}}
