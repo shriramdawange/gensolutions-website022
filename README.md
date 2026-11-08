@@ -1,73 +1,49 @@
-# GenSolutions official website
+# GenSolutions — Official Website
 
-A dark, responsive company website built with Next.js App Router, TypeScript, and Tailwind CSS v4. Styling is authored in `app/globals.css` for a highly art-directed, responsive visual system.
+**Build what matters.** A responsive, multi-page company website built with plain HTML, CSS and vanilla JavaScript.
 
-## Included
+No React, Next.js, build step, npm install or backend is required.
 
-- Responsive navigation and hero section
-- Company positioning and capabilities
-- Product portfolio for ZeroBite, AIRLANCE, and VAYU-SENTINEL
-- Engineering approach, people/culture, and careers sections
-- Project enquiry form with server-side validation
-- Optional Resend email delivery integration
-- SEO metadata and Open Graph basics
-- `.env.example` and this setup guide
+## Local preview
+Open `index.html` directly in a browser, or serve the repository root with any static HTTP server.
 
-## Run locally
+## Pages
+- `index.html` — homepage and GenSolutions DNA
+- `pages/about.html` — why we exist, mission, vision and values
+- `pages/capabilities.html` — AI, software engineering, R&D and product innovation
+- `pages/work.html` — portfolio overview
+- `pages/project-vayu-sentinel.html` — atmospheric intelligence research
+- `pages/project-zerobite.html` — food redistribution initiative
+- `pages/project-airlance.html` — medical logistics product initiative
+- `pages/team.html` — leadership
+- `pages/approach.html` — how we think and build
+- `pages/contact.html` — email-based enquiry form
 
-Requirements: Node.js 20.9 or newer.
+## GenSolutions leadership
+- **Shriram Dawange** — Founder
+- **Shudhanshu Yadav** — Chief Executive Officer
+- **Chinmay Rakhonde** — Managing Director
 
-```bash
-npm install
-cp .env.example .env.local
-npm run dev
-```
+## Company details
+- Email: hello.gensolutions@gmail.com
+- Location: Chhatrapati Sambhajinagar, Maharashtra, India
+- Domain target: gensolutions.in
 
-Open http://localhost:3000.
+## Project status integrity
+The portfolio distinguishes a research prototype (VAYU-SENTINEL), discovery / MVP planning (ZeroBite), and a product initiative (AIRLANCE). Do not describe these as production services unless their status is updated and verified.
 
-## Connect the enquiry form
+## Contact form
+The contact form opens the visitor's configured email application with a pre-filled message to the company inbox. It does not store submissions or claim server-side delivery. For a hosted form endpoint, add spam protection, privacy disclosures and server-side validation.
 
-The form intentionally does **not** pretend to store or send messages until email delivery is configured.
+## Static deployment
+This repository is suitable for GitHub Pages, Cloudflare Pages, Netlify or Vercel static hosting. For Cloudflare Pages, use the repository root as the project root and leave build command and build output directory unset / set to `/` as appropriate for the provider's current dashboard.
 
-1. Create a Resend account and API key.
-2. Verify a sending domain/address in Resend.
-3. Copy `.env.example` to `.env.local` and set:
-   - `RESEND_API_KEY`
-   - `CONTACT_TO_EMAIL` (default: `hello@gensolutions.in`)
-   - `CONTACT_FROM_EMAIL` (must be an address/domain verified with your email provider)
-4. Restart the development server.
-
-The API route validates user input and sends the enquiry through Resend. Do not commit `.env.local` or API keys.
-
-## Production check
-
-```bash
-npm run lint
-npm run build
-npm run start
-```
-
-## Deploy
-
-Recommended: Vercel or another platform that supports Next.js App Router and Node route handlers.
-
-1. Import the repository/project.
-2. Add the three environment variables in the deployment settings.
-3. Deploy and test the contact form on the deployed URL.
-4. In your domain registrar DNS settings, connect `gensolutions.in` using the DNS records supplied by your hosting provider.
-5. Verify both the apex domain and `www` behavior, HTTPS, metadata, and form delivery.
-
-Do not copy DNS values from examples; use the exact values displayed by your selected host and registrar.
+Connect `gensolutions.in` in the hosting dashboard and use only the DNS records provided by the host and domain registrar. Verify HTTPS, apex and `www` behavior, all navigation links and the contact email before announcing launch.
 
 ## Before public launch
-
-- Confirm company contact inbox access and email delivery.
-- Review product status and descriptions for accuracy.
-- Add the final approved logo and social links if available.
-- Add privacy notice and any applicable company/legal details.
-- Test keyboard navigation, mobile layouts, and form delivery.
-- Add analytics only if needed and with appropriate privacy disclosures.
-
-## Current product status wording
-
-The portfolio labels ZeroBite as a product in development, AIRLANCE as a product initiative, and VAYU-SENTINEL as a research initiative. Update these labels if the official status changes.
+1. Confirm leadership designations and public profile details.
+2. Add only approved logo files, photographs and social links.
+3. Review project descriptions and statuses.
+4. Test keyboard navigation and mobile/desktop layouts.
+5. Confirm domain DNS, HTTPS and contact flow.
+6. Add a privacy page before introducing analytics, cookies or data collection.
