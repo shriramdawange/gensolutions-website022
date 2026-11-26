@@ -1,153 +1,67 @@
-// GenSolutions — lightweight motion system (vanilla JavaScript)
 (() => {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  "use strict";
   const body = document.body;
-  const toggle = document.querySelector(".menu-toggle");
+  const menuButton = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".nav");
 
-  // Keep the mobile navigation keyboard and screen-reader friendly.
-  if (toggle && nav) {
-    toggle.addEventListener("click", () => {
+  if (menuButton && nav) {
+    menuButton.addEventListener("click", () => {
       const open = nav.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", String(open));
+      menuButton.setAttribute("aria-expanded", String(open));
+      menuButton.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+      body.classList.toggle("menu-open", open);
     });
-    nav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        nav.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
-      });
-    });
+    nav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+      nav.classList.remove("open");
+      menuButton.setAttribute("aria-expanded", "false");
+      menuButton.setAttribute("aria-label", "Open navigation");
+      body.classList.remove("menu-open");
+    }));
   }
 
-  // Current year in every footer.
-  document.querySelectorAll("#year").forEach((el) => {
-    el.textContent = String(new Date().getFullYear());
-  });
+  document.querySelectorAll("[data-year]").forEach(node => node.textContent = String(new Date().getFullYear()));
 
-  // Reading progress indicator.
-  const progress = document.createElement("div");
-  progress.className = "scroll-progress";
-  progress.setAttribute("aria-hidden", "true");
-  body.prepend(progress);
-
-  const updateScrollUI = () => {
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
-    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, ratio))})`;
-    document.querySelector(".site-header")?.classList.toggle("is-scrolled", window.scrollY > 12);
+  const header = document.querySelector(".site-header");
+  const updateHeader = () => {
+    if (header) header.classList.toggle("is-scrolled", window.scrollY > 12);
   };
-  window.addEventListener("scroll", updateScrollUI, { passive: true });
-  updateScrollUI();
+  window.addEventListener("scroll", updateHeader, {passive:true});
+  updateHeader();
 
-  if (!reduceMotion) {
-    body.classList.add("motion-enabled");
-
-    // Soft cursor ambience on desktop; no custom cursor or interaction hijack.
-    if (window.matchMedia("(pointer: fine)").matches) {
-      const aura = document.createElement("div");
-      aura.className = "pointer-aura";
-      aura.setAttribute("aria-hidden", "true");
-      body.append(aura);
-      window.addEventListener("pointermove", (event) => {
-        aura.style.setProperty("--pointer-x", `${event.clientX}px`);
-        aura.style.setProperty("--pointer-y", `${event.clientY}px`);
-      }, { passive: true });
-
-      // A subtle pointer response in the hero artwork.
-      const art = document.querySelector(".hero-art");
-      if (art) {
-        art.addEventListener("pointermove", (event) => {
-          const bounds = art.getBoundingClientRect();
-          const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-          const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-          art.style.setProperty("--art-shift-x", `${x * -14}px`);
-          art.style.setProperty("--art-shift-y", `${y * -14}px`);
-        });
-        art.addEventListener("pointerleave", () => {
-          art.style.setProperty("--art-shift-x", "0px");
-          art.style.setProperty("--art-shift-y", "0px");
-        });
-      }
-
-      // Very restrained card tilt, only on larger screens.
-      if (window.matchMedia("(min-width: 900px)").matches) {
-        document.querySelectorAll(".capability-card, .team-card").forEach((card) => {
-          card.addEventListener("pointermove", (event) => {
-            const rect = card.getBoundingClientRect();
-            const px = (event.clientX - rect.left) / rect.width;
-            const py = (event.clientY - rect.top) / rect.height;
-            card.style.setProperty("--tilt-x", `${(0.5 - py) * 3}deg`);
-            card.style.setProperty("--tilt-y", `${(px - 0.5) * 3}deg`);
-            card.style.setProperty("--spot-x", `${px * 100}%`);
-            card.style.setProperty("--spot-y", `${py * 100}%`);
-          });
-          card.addEventListener("pointerleave", () => {
-            card.style.setProperty("--tilt-x", "0deg");
-            card.style.setProperty("--tilt-y", "0deg");
-            card.style.setProperty("--spot-x", "50%");
-            card.style.setProperty("--spot-y", "50%");
-          });
-        });
-      }
-    }
-
-    // Staggered, one-time reveal as sections enter the viewport.
-    const revealTargets = document.querySelectorAll(
-      ".intro-content h2, .intro-bottom, .section-heading, .capability-card, " +
-      ".project-row, .manifesto-inner > p, .manifesto-bottom, " +
-      ".people-strip > div, .contact-band-inner, .dna-statement, " +
-      ".dna-grid article, .method-step, .method-footer, .content-grid, " +
-      ".team-card, .project-detail > *, .contact-layout > *"
-    );
-
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver((entries, activeObserver) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          activeObserver.unobserve(entry.target);
-        });
-      }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
-
-      revealTargets.forEach((element, index) => {
-        element.classList.add("reveal");
-        const siblings = Array.from(element.parentElement?.children || []);
-        const siblingIndex = siblings.indexOf(element);
-        element.style.setProperty("--reveal-delay", `${Math.min(siblingIndex, 5) * 75}ms`);
-        observer.observe(element);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    const targets = document.querySelectorAll(".cap-card,.work-row,.founder-card,.content-row,.principles-grid article,.capability-detail,.approach-steps article,.career-opening,.project-detail-main section");
+    const observer = new IntersectionObserver((entries, activeObserver) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        activeObserver.unobserve(entry.target);
       });
-    }
-
-    // Tiny magnetic response for primary calls-to-action.
-    if (window.matchMedia("(pointer: fine) and (min-width: 900px)").matches) {
-      document.querySelectorAll(".button-primary, .big-arrow").forEach((button) => {
-        button.addEventListener("pointermove", (event) => {
-          const rect = button.getBoundingClientRect();
-          const dx = event.clientX - (rect.left + rect.width / 2);
-          const dy = event.clientY - (rect.top + rect.height / 2);
-          button.style.transform = `translate(${dx * 0.045}px, ${dy * 0.045}px)`;
-        });
-        button.addEventListener("pointerleave", () => {
-          button.style.transform = "";
-        });
-      });
-    }
+    }, {threshold:0.12,rootMargin:"0px 0px -24px 0px"});
+    targets.forEach((node,index) => {
+      node.classList.add("reveal");
+      node.style.setProperty("--reveal-delay", Math.min(index % 4, 3) * 65 + "ms");
+      observer.observe(node);
+    });
   }
 
-  // The contact form prepares an email; this static site does not store submissions.
-  const form = document.querySelector(".contact-form");
-  if (form) {
-    form.addEventListener("submit", (event) => {
+  const contactForm = document.getElementById("contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", event => {
       event.preventDefault();
-      if (!form.reportValidity()) return;
-      const data = new FormData(form);
-      const subject = encodeURIComponent(`GenSolutions enquiry — ${data.get("name")}`);
+      if (!contactForm.reportValidity()) return;
+      const data = new FormData(contactForm);
+      const subject = encodeURIComponent("DAVAN Technologies enquiry — " + data.get("name"));
       const message = encodeURIComponent(
-        `Name: ${data.get("name")}\nEmail: ${data.get("email")}\nOrganisation: ${data.get("organisation")}\nInterest: ${data.get("interest")}\n\n${data.get("message")}`
+        "Name: " + data.get("name") + "\n" +
+        "Email: " + data.get("email") + "\n" +
+        "Organisation: " + (data.get("organisation") || "Not specified") + "\n" +
+        "Interest: " + data.get("interest") + "\n\n" +
+        data.get("message")
       );
-      const success = form.querySelector(".form-success");
-      if (success) success.style.display = "block";
-      window.location.href = `mailto:hello.gensolutions@gmail.com?subject=${subject}&body=${message}`;
+      const success = contactForm.querySelector(".form-success");
+      if (success) success.hidden = false;
+      window.location.href = "mailto:hello.gensolutions@gmail.com?subject=" + subject + "&body=" + message;
     });
   }
 })();
