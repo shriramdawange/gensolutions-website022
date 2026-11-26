@@ -324,8 +324,8 @@ body.menu-open{overflow:hidden}
 .contact-card-foot a:hover{background:#263d2d;color:white}
 
 /* shared micro-interactions */
-[data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms)}
-[data-reveal].is-visible{opacity:1;transform:none}
+body.js-reveal [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms)}
+body.js-reveal [data-reveal].is-visible{opacity:1;transform:none}
 @keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @keyframes chipFloat{0%,100%{translate:0 0}50%{translate:0 -10px}}
 @keyframes orbitFloat{0%,100%{translate:0 0}50%{translate:0 -8px}}

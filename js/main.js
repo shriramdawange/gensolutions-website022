@@ -26,6 +26,11 @@
     }, {passive:true});
   }
 
+  // Hide unavailable remote photos cleanly; the tile backgrounds remain as fallbacks.
+  document.querySelectorAll(".story-tile img, .team-photo-new img").forEach(image => {
+    image.addEventListener("error", () => { image.hidden = true; }, {once:true});
+  });
+
   // Shared dynamic year.
   document.querySelectorAll("[data-year]").forEach(node => {
     node.textContent = String(new Date().getFullYear());
@@ -47,6 +52,7 @@
 
   // Reveal content only when it enters the viewport; reduced-motion stays static.
   if (!reduceMotion && "IntersectionObserver" in window) {
+    body.classList.add("js-reveal");
     const targets = document.querySelectorAll(
       "[data-reveal], .cap-card, .work-row, .founder-card, .content-row, " +
       ".principles-grid article, .capability-detail, .approach-steps article, " +
