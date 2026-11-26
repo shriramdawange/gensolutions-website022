@@ -1,57 +1,38 @@
-# GenSolutions — Official Website
+# DAVAN Technologies — Official Website
 
-**Build what matters.** A responsive company website built with plain HTML, CSS and vanilla JavaScript.
+The official DAVAN Technologies website is a static HTML, CSS and vanilla JavaScript site deployed using GitHub Pages from the repository root on the `main` branch. The custom domain `gensolutions.in` remains attached to the site.
 
-The site presents GenSolutions as an independent technology studio: research-led, engineering-minded and focused on building useful technology from meaningful questions.
+## Website structure
+- `index.html` — company overview, capabilities, work, founding members, careers and contact.
+- `pages/` — about, capabilities, approach, founding members, selected work, project detail, contact and privacy pages.
+- `careers/` — careers listing, dedicated role pages and generic role detail page for future Supabase openings.
+- `css/styles.css` — shared responsive design system.
+- `js/main.js` — navigation, motion, current year and email-draft contact form.
+- `js/careers.js` — Supabase careers data, PDF skill extraction, resume upload and application submission.
+- `assets/` — DAVAN logo, favicon and hiring poster.
 
-## Preview locally
-Open `index.html` directly in a browser, or serve the repository root with any static HTTP server.
+## Careers and applications
+The careers pages read published openings from `public.career_openings` in the DAVAN-CAREERS Supabase project. Candidate applications are inserted into `public.career_applications`; PDF resumes are uploaded to the private `davan-resumes` storage bucket.
+- Initial positions: Full-Stack Developer Intern (2), Flutter Developer Intern (2), Management Intern (1).
+- Hours: 4 per day. Start date: 05 December 2026.
+- PDF resume only, maximum 5 MB.
+- PDF.js extracts selectable resume text to suggest skills. Candidates can edit the selected skills.
+- Applicants cannot read candidate records or set management-controlled application status fields. Review applications in the Supabase dashboard.
+- Public frontend uses a Supabase publishable key only. Never add a service-role key or secret to this repository.
 
-## Pages
-- `index.html` — company overview, DNA, capabilities, working method and selected initiatives
-- `pages/about.html` — why we exist, mission, vision and values
-- `pages/capabilities.html` — AI, software engineering, R&D and product innovation
-- `pages/work.html` — portfolio overview
-- `pages/project-vayu-sentinel.html` — atmospheric intelligence research
-- `pages/project-zerobite.html` — food redistribution initiative
-- `pages/project-airlance.html` — medical logistics product initiative
-- `pages/team.html` — leadership
-- `pages/approach.html` — problem-to-validation working method
-- `pages/contact.html` — email-based enquiry form
+Supabase project: `svsweslezorghidounxd` (Mumbai / ap-south-1).
 
-## Brand and experience
-- Deep evergreen / near-black foundation
-- Warm mineral-green highlight, with restrained mint and clay accents
-- Manrope typography with DM Mono for technical labels
-- Responsive layouts for desktop, tablet and mobile
-- CSS/JavaScript motion: hero entrance, orbit animation, scroll reveals, pointer ambience, card interactions and reading progress
-- Respects `prefers-reduced-motion`; no animation framework or runtime dependency
+## Local preview
+Serve the repository root using a local HTTP server so browser API requests work:
 
-## GenSolutions leadership
-- **Shriram Dawange** — Founder
-- **Shudhanshu Yadav** — Chief Executive Officer
-- **Chinmay Rakhonde** — Managing Director
+```bash
+python -m http.server 8000
+```
 
-## Company details
-- Email: hello.gensolutions@gmail.com
-- Location: Chhatrapati Sambhajinagar, Maharashtra, India
-- Domain: https://gensolutions.in
-
-## Project status integrity
-The portfolio distinguishes a research prototype (VAYU-SENTINEL), discovery / MVP planning (ZeroBite), and a product initiative (AIRLANCE). Do not describe these as production services unless their status is updated and verified.
-
-## Contact form
-The contact form opens the visitor's configured email application with a pre-filled message to the company inbox. It does not store submissions or claim server-side delivery. A hosted enquiry endpoint can be added later with spam protection, privacy disclosures and server-side validation.
+Open http://localhost:8000.
 
 ## Deployment
-This is a static website published from the `main` branch using GitHub Pages. The custom domain is configured through the repository's Pages settings and DNS records at the registrar.
+GitHub Pages publishes from `main / (root)`. The repository includes a root `CNAME` file for `gensolutions.in` and `.nojekyll`. Keep these files in place. A merge to `main` triggers the normal GitHub Pages deployment. No DNS changes are required for this visual/content release.
 
-A normal content update pushed to `main` triggers a new Pages deployment. Verify the published site after each meaningful release, especially navigation, mobile layouts, the custom domain and HTTPS.
-
-## Before public launch
-1. Confirm leadership designations and approved public profile details.
-2. Add only approved logos, team photographs and social links.
-3. Review all project descriptions and status labels.
-4. Test keyboard navigation, mobile layouts and reduced-motion behavior.
-5. Confirm DNS, HTTPS and the contact-email flow.
-6. Add a privacy page before introducing analytics, cookies or data collection.
+## Data and privacy
+The careers application and resume handling are described in `pages/privacy.html`. Contact enquiries are prepared as an email draft and are not stored by the static website. Email notifications for job applications are not configured; review new applications in Supabase.
