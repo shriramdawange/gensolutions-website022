@@ -37,14 +37,19 @@
     safeText("career-total",String(total).padStart(2,"0"));
     safeText("career-role-count",String(openings.length).padStart(2,"0"));
     if(!openings.length){host.innerHTML='<div class="empty-state">There are no published openings at the moment. Please check again soon.</div>';return;}
-    host.innerHTML=openings.map((role,index)=>
-      '<article class="career-opening">'+
-      '<span class="opening-number">0'+(index+1)+'</span>'+
-      '<div class="opening-copy"><span class="opening-kicker">INTERNSHIP · '+escapeHtml(role.vacancies)+' '+(Number(role.vacancies)===1?"VACANCY":"VACANCIES")+'</span>'+
-      '<h3>'+escapeHtml(role.title)+'</h3><p>'+escapeHtml(role.summary)+'</p>'+
-      '<div class="skill-tags">'+(role.skills||[]).slice(0,5).map(skill=>'<span>'+escapeHtml(skill)+'</span>').join("")+'</div></div>'+
-      '<div class="opening-meta"><span>'+escapeHtml(role.hours_per_day)+' HOURS / DAY</span><span>STARTS '+escapeHtml(formatDate(role.start_date))+'</span><a href="'+roleUrl(role.slug)+'">View role <b>↗</b></a></div></article>'
-    ).join("");
+    host.innerHTML=openings.map((role,index)=>{
+      const vacancyLabel=Number(role.vacancies)===1?"1 OPENING":String(role.vacancies)+" OPENINGS";
+      const dateLabel=formatDate(role.start_date);
+      return '<article class="career-opening career-opening-card">'+
+        '<div class="opening-card-top"><span class="opening-number">'+String(index+1).padStart(2,"0")+'</span>'+
+        '<span class="opening-kicker">INTERNSHIP · '+escapeHtml(vacancyLabel)+'</span></div>'+
+        '<div class="opening-copy"><h3>'+escapeHtml(role.title)+'</h3>'+
+        '<p>'+escapeHtml(role.summary)+'</p></div>'+
+        '<div class="opening-card-meta"><span><i class="meta-dot"></i>'+escapeHtml(role.hours_per_day)+' HOURS / DAY</span>'+
+        '<span><i class="meta-dot meta-dot-date"></i>STARTS '+escapeHtml(dateLabel)+'</span></div>'+
+        '<a class="opening-cta" href="'+roleUrl(role.slug)+'">View role &amp; apply <b aria-hidden="true">↗</b></a>'+
+        '</article>';
+    }).join("");
   }
   async function renderList(){if(document.getElementById("career-openings"))renderOpenings(await getOpenings());}
   function renderListItems(id,values){const node=document.getElementById(id);if(node)node.innerHTML=(values||[]).map(item=>"<li>"+escapeHtml(item)+"</li>").join("");}
