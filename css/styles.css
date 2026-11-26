@@ -229,7 +229,7 @@ img{max-width:100%;display:block}
 .form-success{padding:12px;border:1px solid #c9d9bc;background:#eff5e8;color:#48683e;font-size:12px}
 .scroll-progress{position:fixed;z-index:100;left:0;top:0;height:2px;width:100%;background:var(--green-strong);transform:scaleX(0);transform-origin:left;pointer-events:none}
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1)}
-.reveal.is-visible{opacity:1;transform:none}
+.reveal.is-visible{opacity:1;transform:none}.reveal{transition-delay:var(--reveal-delay,0ms)}
 .career-hero{background:linear-gradient(115deg,#edf2e8,#f6f7f3)}
 .career-overview{display:grid;grid-template-columns:repeat(4,1fr);margin-top:44px;border:1px solid var(--line);background:rgba(255,255,255,.56)}
 .career-overview>div{display:flex;flex-direction:column;gap:5px;padding:17px 20px;border-right:1px solid var(--line)}
