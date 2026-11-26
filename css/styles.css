@@ -1076,3 +1076,39 @@ body.js-reveal [data-reveal].is-visible{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   .career-opening.career-opening-card,.opening-cta{transition:none}
 }
+
+
+/* DAVAN portfolio artwork and current team roster */
+.project-image-art{padding:0;background:#e9eee7}
+.project-image-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.project-hero-visual{padding-top:34px}
+.project-hero-visual img{display:block;width:100%;height:clamp(240px,38vw,450px);object-fit:cover;object-position:center;border:1px solid #dfe6dc;border-radius:17px;box-shadow:0 18px 48px rgba(20,35,28,.10)}
+.work-row{grid-template-columns:112px minmax(0,1fr) 190px 20px}
+.work-thumbnail{display:block;width:100px;height:82px;overflow:hidden;border:1px solid #e2e8de;border-radius:9px;background:#e8efe5}
+.work-thumbnail img{display:block;width:100%;height:100%;object-fit:cover}
+.founder-grid-page{grid-template-columns:repeat(2,minmax(0,1fr))}
+.management-lead-card{background:linear-gradient(140deg,#f5f9ef,#fff);border-color:#d9e7cf}
+.management-lead-card .founder-monogram{background:#e3efd9;color:#5f824e;border-color:#d2e3c6}
+.initials-zero{background:#f8eadf;color:#a66c49}
+.initials-management{background:#e5f0dc;color:#5b7f4b}
+.team-member-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start}
+.team-member-new{min-width:0;padding:13px 12px;gap:10px}
+.team-member-new h3{font-size:12px}
+.team-member-new small{font-size:6.5px;letter-spacing:.07em}
+.member-initials{flex:0 0 42px;width:42px;height:42px}
+.member-index{font-size:6px}
+.team-side-note{grid-column:1/-1}
+@media(max-width:820px){
+ .work-row{grid-template-columns:88px minmax(0,1fr) 160px 18px}
+ .work-thumbnail{width:80px;height:74px}
+}
+@media(max-width:600px){
+ .work-row{grid-template-columns:68px minmax(0,1fr) 18px;gap:10px}
+ .work-thumbnail{width:64px;height:68px}
+ .work-status{grid-column:2;grid-row:2}
+ .work-arrow{grid-column:3;grid-row:1}
+ .project-hero-visual{padding-top:20px}
+ .project-hero-visual img{height:210px;border-radius:11px}
+ .team-member-list{grid-template-columns:1fr}
+ .team-side-note{grid-column:auto}
+}
