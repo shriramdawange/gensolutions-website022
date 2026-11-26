@@ -27,9 +27,10 @@
     }catch(error){console.warn("DAVAN Careers: using cached opening data.",error);return fallback;}
   }
   function roleUrl(slug){
+    const base = "/careers/";
     return ["full-stack-developer","flutter-developer","management-intern"].includes(slug)
-      ? "./"+encodeURIComponent(slug)+"/"
-      : "./role.html?slug="+encodeURIComponent(slug);
+      ? base + encodeURIComponent(slug) + "/"
+      : base + "role.html?slug=" + encodeURIComponent(slug);
   }
   function renderOpenings(openings){
     const host=document.getElementById("career-openings");if(!host)return;
