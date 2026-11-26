@@ -36,6 +36,26 @@
     node.textContent = String(new Date().getFullYear());
   });
 
+  // Skip-to-content link for keyboard users; expose the main landmark as a target.
+  const mainEl = document.querySelector("main");
+  if (mainEl) {
+    if (!mainEl.id) mainEl.id = "main";
+    mainEl.setAttribute("tabindex", "-1");
+    const skip = document.createElement("a");
+    skip.className = "skip-link";
+    skip.href = "#main";
+    skip.textContent = "Skip to content";
+    body.insertBefore(skip, body.firstChild);
+  }
+
+  // Reflect active navigation state to assistive technology.
+  const markCurrent = link => {
+    const active = link.classList.contains("active");
+    if (active) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  };
+  nav && nav.querySelectorAll("a").forEach(markCurrent);
+
   // Header depth and lightweight reading progress.
   const progress = document.createElement("div");
   progress.className = "scroll-progress";
@@ -85,6 +105,7 @@
           const active = item.section === entry.target;
           if (active) item.link.classList.add("active");
           else item.link.classList.remove("active");
+          markCurrent(item.link);
         });
       });
     }, {rootMargin:"-30% 0px -58% 0px",threshold:0});

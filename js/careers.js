@@ -11,6 +11,7 @@
     {id:"d2b2d16a-a097-4b3a-adf9-26d3452e7e6d",slug:"management-intern",title:"Management Intern",summary:"Coordinate people, projects and execution across teams.",description:"Support day-to-day project coordination, team communication, task follow-through and operational reporting across active product initiatives.",responsibilities:["Coordinate tasks, milestones and follow-ups across project teams","Maintain project trackers, meeting notes and documentation","Support communication between technical and management teams","Prepare concise progress updates and flag blockers early"],requirements:["Previous internship, project coordination or team leadership experience","Strong written and verbal communication","Organised approach to planning, follow-up and documentation","Comfortable working with spreadsheets and project management tools"],skills:["Project Coordination","Communication","Documentation","Task Management","Reporting","Team Collaboration"],vacancies:1,hours_per_day:4,start_date:"2026-12-05"}
   ];
   const knownSkills = ["JavaScript","TypeScript","React","Next.js","Node.js","Express","HTML","CSS","Tailwind CSS","Python","Java","Dart","Flutter","Firebase","Supabase","PostgreSQL","MySQL","MongoDB","REST APIs","GraphQL","Git","GitHub","Docker","AWS","Vercel","Figma","UI/UX","State Management","Riverpod","Provider","Project Coordination","Communication","Documentation","Task Management","Reporting","Leadership","Excel","Google Sheets","Agile","Scrum","Jira","Trello","Notion"];
+  const KNOWN_ROLES=["full-stack-developer","flutter-developer","management-intern"];
   const headers = {apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY};
   let currentOpening=null, selectedSkills=[], resumeFile=null;
 
@@ -26,10 +27,15 @@
       return Array.isArray(data)&&data.length?data:[];
     }catch(error){console.warn("DAVAN Careers: using cached opening data.",error);return fallback;}
   }
+  // Build a correct relative URL for a role, regardless of where renderOpenings runs.
+  // The home page sits one level above careers/; the careers listing sits inside it.
+  function careersBase(){return document.body.dataset.page==="home" ? "careers/" : "";}
   function roleUrl(slug){
-    return ["full-stack-developer","flutter-developer","management-intern"].includes(slug)
-      ? "./"+encodeURIComponent(slug)+"/"
-      : "./role.html?slug="+encodeURIComponent(slug);
+    const base=careersBase();
+    const enc=encodeURIComponent(slug);
+    return KNOWN_ROLES.includes(slug)
+      ? base+enc+"/"
+      : base+"role.html?slug="+enc;
   }
   function renderOpenings(openings){
     const host=document.getElementById("career-openings");if(!host)return;
@@ -114,10 +120,13 @@
     const resumeName=document.getElementById("resume-name");
     const parseStatus=document.getElementById("resume-skill-status");
     const workplace=document.getElementById("workplace-field");
+    const workplaceInput=form.elements.current_workplace;
     const submit=form.querySelector('button[type="submit"]');
     form.querySelectorAll('input[name="working"]').forEach(input=>input.addEventListener("change",()=>{
-      const yes=form.querySelector('input[name="working"]:checked').value==="yes";
-      workplace.hidden=!yes;form.elements.current_workplace.required=yes;
+      const checked=form.querySelector('input[name="working"]:checked');
+      const yes=!!checked&&checked.value==="yes";
+      if(workplace)workplace.hidden=!yes;
+      if(workplaceInput)workplaceInput.required=yes;
     }));
     resumeInput.addEventListener("change",async()=>{
       resumeFile=resumeInput.files&&resumeInput.files[0]||null;selectedSkills=[];drawSkills();parseStatus.textContent="";
@@ -140,7 +149,7 @@
     document.getElementById("custom-skill").addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();document.getElementById("add-skill").click();}});
     form.addEventListener("submit",async event=>{
       event.preventDefault();formStatus("","");
-      if(form.elements.website.value.trim())return;
+      const honeypot=form.elements.website;if(honeypot&&String(honeypot.value||"").trim())return;
       if(!currentOpening){formStatus("error","This opening is not accepting applications.");return;}
       if(!resumeFile){formStatus("error","Please upload your resume as a PDF.");return;}
       if(!selectedSkills.length){formStatus("error","Please select or add at least one relevant skill.");return;}
@@ -167,7 +176,7 @@
         });
         if(!response.ok)throw new Error("Your resume uploaded, but the application could not be saved. Please retry.");
         form.reset();resumeFile=null;selectedSkills=[];drawSkills();resumeName.textContent="Choose your resume";parseStatus.textContent="";
-        workplace.hidden=true;form.elements.current_workplace.required=false;
+        if(workplace)workplace.hidden=true;if(workplaceInput)workplaceInput.required=false;
         formStatus("success","Application received. Thank you for applying to DAVAN Technologies.");
         form.querySelectorAll("input,select,textarea").forEach(control=>control.disabled=true);
         submit.disabled=true;submit.textContent="Application received";
@@ -182,14 +191,36 @@
     window.setTimeout(async()=>{
       try{if(sessionStorage.getItem("davan-hiring-popup-seen"))return;}catch(error){}
       const openings=await getOpenings();
+      const previouslyFocused=document.activeElement;
       const overlay=document.createElement("div");overlay.className="hiring-overlay";
-      overlay.innerHTML='<section class="hiring-dialog" role="dialog" aria-modal="true" aria-labelledby="hiring-dialog-title"><button type="button" class="dialog-close" aria-label="Close">×</button><span class="eyebrow"><span></span> DAVAN CAREERS / 2026</span><h2 id="hiring-dialog-title">We are <em>hiring.</em></h2><p>Experienced interns wanted. Explore current openings and find where your skills fit.</p><div class="dialog-roles">'+openings.map(role=>'<a href="careers/'+encodeURIComponent(role.slug)+'/"><span>'+escapeHtml(role.title)+'</span><small>'+escapeHtml(role.vacancies)+' '+(Number(role.vacancies)===1?"vacancy":"vacancies")+'</small><b>↗</b></a>').join("")+'</div><a class="button button-primary" href="careers/">View all openings <span>↗</span></a><button class="dialog-later" type="button">Maybe later</button></section>';
+      overlay.innerHTML='<section class="hiring-dialog" role="dialog" aria-modal="true" aria-labelledby="hiring-dialog-title"><button type="button" class="dialog-close" aria-label="Close">×</button><span class="eyebrow"><span></span> DAVAN CAREERS / 2026</span><h2 id="hiring-dialog-title">We are <em>hiring.</em></h2><p>Experienced interns wanted. Explore current openings and find where your skills fit.</p><div class="dialog-roles">'+openings.map(role=>'<a href="'+roleUrl(role.slug)+'"><span>'+escapeHtml(role.title)+'</span><small>'+escapeHtml(role.vacancies)+' '+(Number(role.vacancies)===1?"vacancy":"vacancies")+'</small><b>↗</b></a>').join("")+'</div><a class="button button-primary" href="careers/">View all openings <span>↗</span></a><button class="dialog-later" type="button">Maybe later</button></section>';
       document.body.appendChild(overlay);
-      const close=()=>{overlay.remove();try{sessionStorage.setItem("davan-hiring-popup-seen","1");}catch(error){}};
+      const dialog=overlay.querySelector(".hiring-dialog");
+      const focusables=()=>dialog.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])');
+      const close=()=>{
+        overlay.remove();
+        document.removeEventListener("keydown",onKey);
+        document.body.classList.remove("menu-open");
+        try{sessionStorage.setItem("davan-hiring-popup-seen","1");}catch(error){}
+        if(previouslyFocused&&typeof previouslyFocused.focus==="function")previouslyFocused.focus();
+      };
+      function onKey(event){
+        if(event.key==="Escape"){event.preventDefault();close();return;}
+        if(event.key==="Tab"){
+          const items=Array.from(focusables());
+          if(!items.length)return;
+          const first=items[0],last=items[items.length-1];
+          if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+          else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+        }
+      }
       overlay.querySelector(".dialog-close").addEventListener("click",close);
       overlay.querySelector(".dialog-later").addEventListener("click",close);
       overlay.addEventListener("click",event=>{if(event.target===overlay)close();});
-      document.addEventListener("keydown",function onKey(event){if(event.key==="Escape"){close();document.removeEventListener("keydown",onKey);}});
+      document.addEventListener("keydown",onKey);
+      // Move focus into the dialog for keyboard users.
+      const firstFocus=dialog.querySelector(".dialog-close");
+      if(firstFocus)firstFocus.focus();
     },2200);
   }
   document.addEventListener("DOMContentLoaded",()=>{
